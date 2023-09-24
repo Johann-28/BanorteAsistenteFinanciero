@@ -10,6 +10,10 @@ col1, col2 = st.columns([1, 1])
 ingreso_mensual = 10000
 gasto_promedio = 75
 
+def mostrar_imagen():
+    url = 'banorte-logo.png'  
+    st.image(url, caption='El banco de mexico')
+
 
 def mostrar_grafico_lineas():
     num_points = 20
@@ -53,6 +57,7 @@ def mostrar_grafico_pastel():
 
 
 def chatbot():
+    mostrar_imagen()
 
     mostrar_grafico_pastel()
 
@@ -402,9 +407,7 @@ Series Accionarias: F1, F2, F3, F4, F5 (Personas Físicas), Comisión por admini
         st.session_state.messages.append(msg)
         st.chat_message("assistant").write(msg.content)
 
-        # Muestra la cantidad de tokens utilizados en la respuesta
-        num_tokens_used = response['usage']['total_tokens']
-        st.write(f"Número de tokens utilizados: {num_tokens_used}")
+
 
 
 chatbot()
