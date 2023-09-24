@@ -1,10 +1,62 @@
 import streamlit as st
 import openai
+import matplotlib.pyplot as plt
+import plotly.express as px
+import numpy as np
 
 
 col1, col2 = st.columns([1, 1])
 
+ingreso_mensual = 10000
+gasto_promedio = 75
+
+
+def mostrar_grafico_lineas():
+    num_points = 20
+    fig, ax = plt.subplots()
+
+    # Genera datos para las líneas fluctuantes
+    sin_invertir = np.random.uniform(2500, 2500, num_points)  # Fluctúa entre 1990 y 2010
+    mejor_caso = np.random.uniform(2500, 2720, num_points)  # Fluctúa entre 2180 y 2220
+    peor_caso = np.random.uniform(2550, 2400, num_points)  # Fluctúa entre 1780 y 1820
+
+    # Agrega líneas horizont
+    ax.plot(sin_invertir, linestyle='--', color='r', label="Objetivo (fluctuante)")
+    ax.plot(mejor_caso, linestyle='--', color='g', label="Mejor Caso (fluctuante)")
+    ax.plot(peor_caso, linestyle='--', color='b', label="Peor Caso (fluctuante)")
+
+    # Agrega etiquetas a los ejes X e Y
+    ax.set_xlabel("Horizonte de inversion/riesgo")
+    ax.set_ylabel("Rendimientos")
+
+    # Leyenda
+    ax.legend()
+
+    with col2:
+        st.pyplot(fig)
+
+# Define una función para mostrar el gráfico de pastel
+def mostrar_grafico_pastel():
+    gasto_fijo = ingreso_mensual * gasto_promedio / 100
+    labels = ['Gasto fijo', 'Ahorro', 'Inversion' ]
+    sizes = [gasto_fijo, 1500, 1000 ]
+
+    fig, ax = plt.subplots()
+    ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  # Hace que el gráfico de pastel sea un círculo.
+
+    labels = ["Ingresos fijos", "Ahorros", "Inversiones"]
+
+    # Muestra el gráfico en la columna 1
+    with col1:
+        st.plotly_chart(px.pie(names=labels, values=sizes, hole=0.3).update_traces(textinfo="percent+label"), use_container_width=True)
+
+
 def chatbot():
+
+    mostrar_grafico_pastel()
+
+    mostrar_grafico_lineas()
     
     st.title("💬 Banorte Asistente virtual")
     st.caption("Ben")
@@ -32,9 +84,6 @@ def chatbot():
 
     # Define el mensaje inicial de la IA
     initial_message = "Hola, en qué puedo ayudarte hoy?"
-    ingreso_mensual = 1000000
-    gasto_promedio = 75
-    edad = 19
 
     # Define el prompt inicial para el modelo de lenguaje
     initial_prompt = f'''
